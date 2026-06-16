@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.churchadmin.controllers.MemberDetailController">
+
+    <!-- ===== Tab pane ===== -->
+    <center>
+        <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+
+            <!-- ─── Tab 1: Info ─────────────────────────────────────────────── -->
+            <Tab text="%members.tab.info">
+                <ScrollPane fitToWidth="true" hbarPolicy="NEVER">
+                    <VBox spacing="12">
+                        <padding><Insets top="16" right="24" bottom="16" left="24"/></padding>
+
+                        <!-- Personal -->
+                        <TitledPane text="%members.section.personal"
+                                    collapsible="false" expanded="true"
+                                    styleClass="card">
+                            <GridPane hgap="12" vgap="10">
+                                <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
+                                <columnConstraints>
+                                    <ColumnConstraints minWidth="160" prefWidth="160"/>
+                                    <ColumnConstraints hgrow="ALWAYS"/>
+                                </columnConstraints>
+
+                                <Label text="%members.field.memberNumber"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <TextField fx:id="memberNumberField" editable="false"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                           style="-fx-background-color: #F3F4F6;"/>
+
+                                <Label text="%members.field.fullName"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <TextField fx:id="fullNameField"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                                <Label text="%members.field.phoneNumber"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                <TextField fx:id="phoneNumberField"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                                <Label text="%members.field.email"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                <TextField fx:id="emailField"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                            </GridPane>
+                        </TitledPane>
+
+                        <!-- Address -->
+                        <TitledPane text="%members.section.address"
+                                    collapsible="false" expanded="true"
+                                    styleClass="card">
+                            <GridPane hgap="12" vgap="10">
+                                <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
+                                <columnConstraints>
+                                    <ColumnConstraints minWidth="160" prefWidth="160"/>
+                                    <ColumnConstraints hgrow="ALWAYS"/>
+                                </columnConstraints>
+
+                                <Label text="%members.field.address"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <TextField fx:id="addressField"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                                <Label text="%members.field.postalCode"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <TextField fx:id="postalCodeField"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                                <Label text="%members.field.city"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                <TextField fx:id="cityField"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                                <Label text="%members.field.place"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                <TextField fx:id="placeField"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                                <Label text="%members.field.parish"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                                <TextField fx:id="parishField"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                            </GridPane>
+                        </TitledPane>
+
+                        <!-- Partner -->
+                        <TitledPane text="%members.section.partner"
+                                    collapsible="false" expanded="true"
+                                    styleClass="card">
+                            <GridPane hgap="12" vgap="10">
+                                <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
+                                <columnConstraints>
+                                    <ColumnConstraints minWidth="160" prefWidth="160"/>
+                                    <ColumnConstraints hgrow="ALWAYS"/>
+                                </columnConstraints>
+
+                                <Label text="%members.field.partnerName"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <TextField fx:id="partnerNameField"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                                <Label text="%members.field.partnerPhone"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <TextField fx:id="partnerPhoneField"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                                <Label text="%members.field.partnerEmail"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                <TextField fx:id="partnerEmailField"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                            </GridPane>
+                        </TitledPane>
+
+                        <!-- Family -->
+                        <TitledPane text="%members.section.family"
+                                    collapsible="false" expanded="true"
+                                    styleClass="card">
+                            <GridPane hgap="12" vgap="10">
+                                <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
+                                <columnConstraints>
+                                    <ColumnConstraints minWidth="160" prefWidth="160"/>
+                                    <ColumnConstraints hgrow="ALWAYS"/>
+                                </columnConstraints>
+
+                                <Label text="%members.field.child1"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <TextField fx:id="child1Field"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                                <Label text="%members.field.child2"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <TextField fx:id="child2Field"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                                <Label text="%members.field.child3"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                <TextField fx:id="child3Field"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                                <Label text="%members.field.child4"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                <TextField fx:id="child4Field"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                                <Label text="%members.field.child5"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                                <TextField fx:id="child5Field"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                            </GridPane>
+                        </TitledPane>
+
+                        <!-- Membership -->
+                        <TitledPane text="%members.section.membership"
+                                    collapsible="false" expanded="true"
+                                    styleClass="card">
+                            <GridPane hgap="12" vgap="10">
+                                <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
+                                <columnConstraints>
+                                    <ColumnConstraints minWidth="160" prefWidth="160"/>
+                                    <ColumnConstraints hgrow="ALWAYS"/>
+                                </columnConstraints>
+
+                                <Label text="%members.field.applicationHolder"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                <TextField fx:id="applicationHolderField"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                                <Label text="%members.field.signingDate"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                <DatePicker fx:id="signingDatePicker"
+                                            GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                            maxWidth="Infinity"/>
+
+                                <Label text="%members.field.iban"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                <TextField fx:id="ibanField"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                                <Label text="%members.field.paymentMethod"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                <ComboBox fx:id="paymentMethodComboBox"
+                                          GridPane.columnIndex="1" GridPane.rowIndex="3"
+                                          maxWidth="Infinity"/>
+
+                                <Label text="%members.field.status"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                                <ComboBox fx:id="statusComboBox"
+                                          GridPane.columnIndex="1" GridPane.rowIndex="4"
+                                          maxWidth="Infinity"/>
+
+                                <Label text="%members.field.category"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                                <TextField fx:id="categoryField"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+                                <Label text="%members.field.householdGroup"
+                                       GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                                <TextField fx:id="householdGroupField"
+                                           GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                            </GridPane>
+                        </TitledPane>
+
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+
+            <!-- ─── Tab 2: Transactions ──────────────────────────────────────── -->
+            <Tab text="%members.tab.transactions">
+                <VBox spacing="12">
+                    <padding><Insets top="16" right="24" bottom="16" left="24"/></padding>
+
+                    <!-- Header row: member name + balance -->
+                    <HBox alignment="CENTER_LEFT">
+                        <Label fx:id="txMemberNameLabel"
+                               style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+                        <Pane HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="txBalanceLabel"
+                               style="-fx-font-size: 13px; -fx-text-fill: #6B7280;"/>
+                    </HBox>
+
+                    <!-- Transactions table -->
+                    <TableView fx:id="transactionsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colTxDate"        text="%transactions.date"        prefWidth="110"/>
+                            <TableColumn fx:id="colTxAmount"      text="%transactions.amount"      prefWidth="100"/>
+                            <TableColumn fx:id="colTxDescription" text="%transactions.description" prefWidth="260"/>
+                            <TableColumn fx:id="colTxType"        text="%transactions.type"        prefWidth="100"/>
+                        </columns>
+                    </TableView>
+
+                    <!-- Empty state -->
+                    <Label fx:id="emptyLabel"
+                           text="%members.transactions.empty"
+                           style="-fx-text-fill: #9CA3AF; -fx-font-style: italic;"
+                           visible="true"/>
+
+                    <!-- Add fee (disabled until Phase 3) -->
+                    <HBox>
+                        <Button fx:id="addFeeButton"
+                                text="%members.transactions.addFee"
+                                disable="true"
+                                styleClass="btn-primary"/>
+                    </HBox>
+
+                </VBox>
+            </Tab>
+
+        </TabPane>
+    </center>
+
+    <!-- ===== Save / Cancel / Delete bar ===== -->
+    <bottom>
+        <HBox spacing="8" alignment="CENTER_LEFT">
+            <padding><Insets top="12" right="24" bottom="16" left="24"/></padding>
+            <!-- Delete — left side, hidden in add-mode, only shown when no transactions -->
+            <Button fx:id="deleteButton"
+                    text="%members.delete"
+                    onAction="#onDelete"
+                    styleClass="btn-danger"
+                    visible="false"
+                    managed="false"/>
+            <!-- Spacer -->
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button text="%common.cancel" onAction="#onCancel" styleClass="btn-secondary"/>
+            <Button fx:id="saveButton" text="%common.save" onAction="#onSave" styleClass="btn-primary"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

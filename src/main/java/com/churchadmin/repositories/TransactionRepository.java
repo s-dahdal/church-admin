@@ -15,6 +15,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
 
     List<Transaction> findByMemberId(String memberId);
 
+    boolean existsByMemberId(String memberId);
+
     List<Transaction> findByType(Transaction.TransactionType type);
 
     List<Transaction> findByDateBetween(LocalDate from, LocalDate to);

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -22,6 +23,11 @@ import java.util.ResourceBundle;
  *
  * Each nav button's userData maps to a FXML filename.
  * Clicking a button loads /fxml/{screen}.fxml into the center StackPane.
+ *
+ * Active-nav tracking: the button whose userData matches the current top-level
+ * screen receives the "active" CSS class.  showView() (used for sub-screens like
+ * MemberDetail) does NOT change the active button so the parent section stays
+ * highlighted.
  */
 @Slf4j
 @Controller
@@ -30,11 +36,25 @@ public class MainLayoutController implements Initializable {
 
     @FXML private StackPane contentArea;
 
+    // Nav buttons — injected so we can manage the "active" CSS class
+    @FXML private Button navDashboard;
+    @FXML private Button navMembers;
+    @FXML private Button navTransactions;
+    @FXML private Button navImportExport;
+    @FXML private Button navSnapshots;
+    @FXML private Button navReports;
+    @FXML private Button navSettings;
+
+    private List<Button> navButtons;
+
     private final JavaFXConfig.FXMLLoaderFactory fxmlLoaderFactory;
     private final LocaleService localeService;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        navButtons = List.of(
+                navDashboard, navMembers, navTransactions,
+                navImportExport, navSnapshots, navReports, navSettings);
         navigateTo("dashboard");
     }
 
@@ -43,6 +63,16 @@ public class MainLayoutController implements Initializable {
         Button btn = (Button) event.getSource();
         String screen = (String) btn.getUserData();
         navigateTo(screen);
+    }
+
+    /**
+     * Show an already-constructed node (e.g. MemberDetail) without changing the
+     * active nav button.  Focus is moved to the content area so no nav button
+     * retains the :focused highlight.
+     */
+    public void showView(Node node) {
+        contentArea.getChildren().setAll(node);
+        contentArea.requestFocus();
     }
 
     public void navigateTo(String screen) {
@@ -58,8 +88,22 @@ public class MainLayoutController implements Initializable {
             loader.setResources(localeService.getBundle());
             Node view = loader.load();
             contentArea.getChildren().setAll(view);
+            setActiveNav(screen);
+            contentArea.requestFocus();
         } catch (IOException e) {
             log.error("Failed to load screen [{}]: {}", screen, e.getMessage(), e);
+        }
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
+    private void setActiveNav(String screen) {
+        if (navButtons == null) return;
+        for (Button b : navButtons) {
+            b.getStyleClass().remove("active");
+            if (screen.equals(b.getUserData())) {
+                b.getStyleClass().add("active");
+            }
         }
     }
 

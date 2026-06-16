@@ -136,10 +136,26 @@ public class ImportService {
                     () -> {
                         Member m = existing.get();
                         m.setFullName(incoming.getFullName());
-                        m.setPhone(incoming.getPhone());
+                        m.setMemberNumber(incoming.getMemberNumber());
+                        m.setPhoneNumber(incoming.getPhoneNumber());
                         m.setEmail(incoming.getEmail());
                         m.setAddress(incoming.getAddress());
-                        m.setJoinDate(incoming.getJoinDate());
+                        m.setPostalCode(incoming.getPostalCode());
+                        m.setCity(incoming.getCity());
+                        m.setPlace(incoming.getPlace());
+                        m.setParish(incoming.getParish());
+                        m.setPartnerName(incoming.getPartnerName());
+                        m.setPartnerPhone(incoming.getPartnerPhone());
+                        m.setPartnerEmail(incoming.getPartnerEmail());
+                        m.setChild1(incoming.getChild1());
+                        m.setChild2(incoming.getChild2());
+                        m.setChild3(incoming.getChild3());
+                        m.setChild4(incoming.getChild4());
+                        m.setChild5(incoming.getChild5());
+                        m.setApplicationHolder(incoming.getApplicationHolder());
+                        m.setSigningDate(incoming.getSigningDate());
+                        m.setIban(incoming.getIban());
+                        m.setPaymentMethod(incoming.getPaymentMethod());
                         m.setStatus(incoming.getStatus());
                         m.setCategory(incoming.getCategory());
                         m.setHouseholdGroup(incoming.getHouseholdGroup());

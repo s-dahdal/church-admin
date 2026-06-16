@@ -1,10 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.churchadmin.controllers.MembersController"
-      spacing="16" style="-fx-padding: 0;">
-    <Label text="%members.title" style="-fx-font-size:22px; -fx-font-weight:bold;"/>
-    <Label text="[Members screen — Phase 2]" style="-fx-text-fill: #9CA3AF;"/>
+      spacing="12">
+
+    <padding><Insets top="0" right="0" bottom="0" left="0"/></padding>
+
+    <!-- Page title -->
+    <Label text="%members.title" styleClass="page-title"/>
+
+    <!-- Toolbar: search · filters · add button -->
+    <HBox spacing="8" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField"
+                   promptText="%members.search.placeholder"
+                   styleClass="search-field"
+                   prefWidth="300"/>
+        <ComboBox fx:id="statusFilter" prefWidth="130"/>
+        <ComboBox fx:id="parishFilter" prefWidth="160"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Button fx:id="addButton"
+                text="%members.add"
+                onAction="#onAddMember"
+                styleClass="btn-primary"/>
+    </HBox>
+
+    <!-- Member table -->
+    <TableView fx:id="membersTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colMemberNumber"
+                         text="%members.field.memberNumber"
+                         prefWidth="115"/>
+            <TableColumn fx:id="colFullName"
+                         text="%members.field.fullName"
+                         prefWidth="210"/>
+            <TableColumn fx:id="colParish"
+                         text="%members.field.parish"
+                         prefWidth="150"/>
+            <TableColumn fx:id="colCity"
+                         text="%members.field.city"
+                         prefWidth="120"/>
+            <TableColumn fx:id="colStatus"
+                         text="%members.field.status"
+                         prefWidth="100"/>
+            <TableColumn fx:id="colPhoneNumber"
+                         text="%members.field.phoneNumber"
+                         prefWidth="135"/>
+        </columns>
+    </TableView>
+
+    <!-- Footer: total count -->
+    <HBox styleClass="card" style="-fx-padding: 8 12;">
+        <Label fx:id="countLabel"/>
+    </HBox>
+
 </VBox>

@@ -1,6 +1,7 @@
 package com.churchadmin.repositories;
 
 import com.churchadmin.models.Member;
+import com.churchadmin.models.enums.MemberStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,16 +13,23 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, String> {
 
-    List<Member> findByStatus(Member.MemberStatus status);
+    List<Member> findByStatus(MemberStatus status);
 
-    List<Member> findByHouseholdGroup(String householdGroup);
+    List<Member> findByParish(String parish);
 
-    List<Member> findByCategory(String category);
+    List<Member> findByFullNameContainingIgnoreCase(String name);
 
-    @Query("SELECT m FROM Member m WHERE LOWER(m.fullName) LIKE LOWER(CONCAT('%', :query, '%')) " +
-           "OR LOWER(m.email) LIKE LOWER(CONCAT('%', :query, '%')) " +
-           "OR m.phone LIKE CONCAT('%', :query, '%')")
-    List<Member> search(@Param("query") String query);
+    Optional<Member> findByMemberNumber(String memberNumber);
 
-    long countByStatus(Member.MemberStatus status);
+    List<Member> findAllByOrderByFullNameAsc();
+
+    long countByStatus(MemberStatus status);
+
+    @Query("SELECT m FROM Member m WHERE " +
+           "LOWER(m.fullName) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+           "LOWER(m.email)    LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+           "LOWER(m.memberNumber) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
+           "LOWER(m.parish)   LIKE LOWER(CONCAT('%', :q, '%')) " +
+           "ORDER BY m.fullName ASC")
+    List<Member> search(@Param("q") String query);
 }
