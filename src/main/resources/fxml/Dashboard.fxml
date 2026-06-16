@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.churchadmin.controllers.DashboardController"
+      spacing="20">
+    <padding><Insets top="0" right="0" bottom="0" left="0"/></padding>
+
+    <Label text="%dashboard.title" styleClass="page-title"
+           style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+
+    <!-- Stat cards row -->
+    <HBox spacing="16" fillHeight="true">
+
+        <VBox styleClass="stat-card" spacing="4">
+            <Label text="%dashboard.balance" styleClass="stat-label"/>
+            <Label fx:id="lblBalance" text="€ 0,00" styleClass="stat-value"/>
+        </VBox>
+
+        <VBox styleClass="stat-card" spacing="4">
+            <Label text="%dashboard.activeMembers" styleClass="stat-label"/>
+            <Label fx:id="lblActiveMembers" text="0" styleClass="stat-value"/>
+        </VBox>
+
+    </HBox>
+
+    <!-- Recent transactions -->
+    <VBox styleClass="card" spacing="12" VBox.vgrow="ALWAYS">
+        <Label text="%dashboard.recentTransactions"
+               style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+        <TableView fx:id="recentTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colDate"   text="%transactions.date"        prefWidth="110"/>
+                <TableColumn fx:id="colDesc"   text="%transactions.description" prefWidth="260"/>
+                <TableColumn fx:id="colType"   text="%transactions.type"        prefWidth="100"/>
+                <TableColumn fx:id="colAmount" text="%transactions.amount"      prefWidth="120"/>
+            </columns>
+        </TableView>
+    </VBox>
+
+</VBox>

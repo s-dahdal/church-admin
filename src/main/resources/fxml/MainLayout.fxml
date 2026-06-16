@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.churchadmin.controllers.MainLayoutController"
+            styleClass="main-layout">
+
+    <!-- ===== Left: Navigation Sidebar ===== -->
+    <left>
+        <VBox styleClass="sidebar" minWidth="200" maxWidth="200">
+            <children>
+                <!-- App branding -->
+                <Label fx:id="appTitleLabel" text="%app.title" styleClass="sidebar-title"/>
+
+                <Separator styleClass="sidebar-separator"/>
+
+                <!-- Nav buttons — text set from ResourceBundle via % prefix -->
+                <Button fx:id="navDashboard"    text="%nav.dashboard"    onAction="#onNav" userData="dashboard"    styleClass="nav-button" maxWidth="Infinity"/>
+                <Button fx:id="navMembers"      text="%nav.members"      onAction="#onNav" userData="members"      styleClass="nav-button" maxWidth="Infinity"/>
+                <Button fx:id="navTransactions" text="%nav.transactions" onAction="#onNav" userData="transactions" styleClass="nav-button" maxWidth="Infinity"/>
+                <Button fx:id="navImportExport" text="%nav.importExport" onAction="#onNav" userData="importExport" styleClass="nav-button" maxWidth="Infinity"/>
+                <Button fx:id="navSnapshots"    text="%nav.snapshots"    onAction="#onNav" userData="snapshots"    styleClass="nav-button" maxWidth="Infinity"/>
+                <Button fx:id="navReports"      text="%nav.reports"      onAction="#onNav" userData="reports"      styleClass="nav-button" maxWidth="Infinity"/>
+
+                <Pane VBox.vgrow="ALWAYS"/>
+
+                <Separator styleClass="sidebar-separator"/>
+                <Button fx:id="navSettings" text="%nav.settings" onAction="#onNav" userData="settings" styleClass="nav-button nav-settings" maxWidth="Infinity"/>
+            </children>
+        </VBox>
+    </left>
+
+    <!-- ===== Center: Dynamic content area ===== -->
+    <center>
+        <StackPane fx:id="contentArea" styleClass="content-area"/>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.churchadmin.controllers.ImportExportController"
+      spacing="16" style="-fx-padding: 0;">
+    <Label text="ImportExport" style="-fx-font-size:22px; -fx-font-weight:bold;"/>
+    <Label text="[ImportExport screen — coming in next phase]" style="-fx-text-fill: #9CA3AF;"/>
+</VBox>

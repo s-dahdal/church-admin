@@ -1,0 +1,196 @@
+/* ============================================================
+   app.css — Church Admin main stylesheet
+   ============================================================ */
+
+/* ---- Base ---- */
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 13px;
+    -fx-background-color: #F5F6FA;
+}
+
+/* ---- Main layout ---- */
+.main-layout {
+    -fx-background-color: #F5F6FA;
+}
+
+/* ---- Sidebar ---- */
+.sidebar {
+    -fx-background-color: #1E2A3A;
+    -fx-padding: 0;
+    -fx-spacing: 2;
+}
+
+.sidebar-title {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 20 16 12 16;
+}
+
+.sidebar-separator {
+    -fx-background-color: #2D3E52;
+    -fx-pref-height: 1;
+    -fx-max-height: 1;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #A8B8CC;
+    -fx-font-size: 13px;
+    -fx-padding: 10 16;
+    -fx-alignment: CENTER-LEFT;
+    -fx-cursor: hand;
+    -fx-border-width: 0;
+    -fx-background-radius: 0;
+}
+
+.nav-button:hover {
+    -fx-background-color: #2D3E52;
+    -fx-text-fill: #FFFFFF;
+}
+
+.nav-button:focused,
+.nav-button.active {
+    -fx-background-color: #2563EB;
+    -fx-text-fill: #FFFFFF;
+}
+
+.nav-settings {
+    -fx-padding: 12 16;
+}
+
+/* ---- Content area ---- */
+.content-area {
+    -fx-background-color: #F5F6FA;
+    -fx-padding: 24;
+}
+
+/* ---- Cards ---- */
+.card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.06), 4, 0, 0, 2);
+    -fx-padding: 20;
+}
+
+/* ---- Page title ---- */
+.page-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1E2A3A;
+}
+
+/* ---- Buttons ---- */
+.btn-primary {
+    -fx-background-color: #2563EB;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #1D4ED8;
+}
+
+.btn-secondary {
+    -fx-background-color: #E5E7EB;
+    -fx-text-fill: #374151;
+    -fx-background-radius: 6;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #D1D5DB;
+}
+
+.btn-danger {
+    -fx-background-color: #EF4444;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-radius: 6;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+}
+
+.btn-danger:hover {
+    -fx-background-color: #DC2626;
+}
+
+/* ---- Table ---- */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: #E5E7EB;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+}
+
+.table-view .column-header {
+    -fx-background-color: #F9FAFB;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6B7280;
+    -fx-font-size: 12px;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #FAFAFA;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #EFF6FF;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #DBEAFE;
+    -fx-text-fill: #1E2A3A;
+}
+
+/* ---- Stat cards (Dashboard) ---- */
+.stat-card {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.07), 6, 0, 0, 2);
+    -fx-padding: 20;
+    -fx-min-width: 180;
+}
+
+.stat-value {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1E2A3A;
+}
+
+.stat-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+}
+
+/* ---- Income / Expense colors ---- */
+.income {
+    -fx-text-fill: #16A34A;
+}
+
+.expense {
+    -fx-text-fill: #DC2626;
+}
+
+/* ---- Form fields ---- */
+.text-field, .combo-box, .date-picker {
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #D1D5DB;
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 6 10;
+}
+
+.text-field:focused, .combo-box:focused, .date-picker:focused {
+    -fx-border-color: #2563EB;
+}
+
+/* ---- Search bar ---- */
+.search-field {
+    -fx-prompt-text-fill: #9CA3AF;
+    -fx-pref-width: 280;
+}

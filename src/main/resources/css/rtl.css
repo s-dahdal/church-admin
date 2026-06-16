@@ -1,0 +1,43 @@
+/* ============================================================
+   rtl.css — Arabic RTL layout overrides
+   Applied on top of app.css when locale = ar
+   ============================================================
+   JavaFX NodeOrientation.RIGHT_TO_LEFT handles most mirroring
+   automatically for built-in containers (HBox, BorderPane, etc.).
+   This file corrects remaining edge cases.
+   ============================================================ */
+
+/* Sidebar: title and nav buttons align right in RTL */
+.sidebar-title {
+    -fx-alignment: CENTER-RIGHT;
+}
+
+.nav-button {
+    -fx-alignment: CENTER-RIGHT;
+}
+
+/* Form labels align right */
+.label {
+    -fx-text-alignment: RIGHT;
+}
+
+/* Table column headers align right */
+.table-view .column-header .label {
+    -fx-alignment: CENTER-RIGHT;
+}
+
+/* Table cells align right */
+.table-cell {
+    -fx-alignment: CENTER-RIGHT;
+}
+
+/* Search field: right-to-left text entry */
+.search-field {
+    -fx-node-orientation: RIGHT-TO-LEFT;
+}
+
+/* Stat cards: text right-aligned */
+.stat-value, .stat-label {
+    -fx-text-alignment: RIGHT;
+    -fx-alignment: CENTER-RIGHT;
+}
