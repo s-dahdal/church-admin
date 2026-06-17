@@ -1,10 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.churchadmin.controllers.TransactionsController"
-      spacing="16" style="-fx-padding: 0;">
-    <Label text="Transactions" style="-fx-font-size:22px; -fx-font-weight:bold;"/>
-    <Label text="[Transactions screen — coming in next phase]" style="-fx-text-fill: #9CA3AF;"/>
+      spacing="12">
+
+    <padding><Insets top="0" right="0" bottom="0" left="0"/></padding>
+
+    <!-- Page title -->
+    <Label text="%transactions.title" styleClass="page-title"/>
+
+    <!-- Balance strip -->
+    <HBox spacing="16">
+
+        <VBox styleClass="stat-card" spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="%balance.current" styleClass="stat-label"/>
+            <Label fx:id="lblBalance" text="€ 0,00" styleClass="stat-value"/>
+        </VBox>
+
+        <VBox styleClass="stat-card" spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="%balance.income" styleClass="stat-label"/>
+            <Label fx:id="lblIncome" text="€ 0,00" styleClass="stat-value income"/>
+        </VBox>
+
+        <VBox styleClass="stat-card" spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="%balance.expense" styleClass="stat-label"/>
+            <Label fx:id="lblExpense" text="€ 0,00" styleClass="stat-value expense"/>
+        </VBox>
+
+    </HBox>
+
+    <!-- Filter bar -->
+    <HBox spacing="8" alignment="CENTER_LEFT">
+        <DatePicker fx:id="dateFromPicker"
+                    promptText="%filter.dateFrom"
+                    prefWidth="140"/>
+        <DatePicker fx:id="dateToPicker"
+                    promptText="%filter.dateTo"
+                    prefWidth="140"/>
+        <ComboBox fx:id="typeFilter"     prefWidth="130"/>
+        <ComboBox fx:id="categoryFilter" prefWidth="160"/>
+        <TextField fx:id="searchField"
+                   promptText="%transactions.search.placeholder"
+                   styleClass="search-field"
+                   prefWidth="220"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Button text="%transactions.add"
+                onAction="#onAddTransaction"
+                styleClass="btn-primary"/>
+    </HBox>
+
+    <!-- Transactions table -->
+    <TableView fx:id="transactionsTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colDate"        text="%transactions.date"        prefWidth="110"/>
+            <TableColumn fx:id="colDescription" text="%transactions.description" prefWidth="240"/>
+            <TableColumn fx:id="colCategory"    text="%transactions.category"    prefWidth="140"/>
+            <TableColumn fx:id="colType"        text="%transactions.type"        prefWidth="100"/>
+            <TableColumn fx:id="colAmount"      text="%transactions.amount"      prefWidth="120"/>
+            <TableColumn fx:id="colMember"      text="%transactions.member"      prefWidth="160"/>
+        </columns>
+    </TableView>
+
+    <!-- Footer: count -->
+    <HBox styleClass="card" style="-fx-padding: 8 12;">
+        <Label fx:id="countLabel"/>
+    </HBox>
+
 </VBox>

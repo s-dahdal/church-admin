@@ -1,13 +1,18 @@
 package com.churchadmin.controllers;
 
+import com.churchadmin.config.JavaFXConfig;
 import com.churchadmin.models.Member;
 import com.churchadmin.models.Transaction;
 import com.churchadmin.models.enums.MemberStatus;
 import com.churchadmin.models.enums.PaymentMethod;
+import com.churchadmin.services.FinancialService;
+import com.churchadmin.services.LocaleService;
 import com.churchadmin.services.MemberService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -26,8 +33,11 @@ import java.util.ResourceBundle;
 public class MemberDetailController implements Initializable {
 
     // ── Spring beans ──────────────────────────────────────────────────────────
-    private final MemberService        memberService;
-    private final MainLayoutController mainLayoutController;
+    private final MemberService                   memberService;
+    private final FinancialService                financialService;
+    private final MainLayoutController            mainLayoutController;
+    private final JavaFXConfig.FXMLLoaderFactory  fxmlLoaderFactory;
+    private final LocaleService                   localeService;
 
     // ── FXML — tabs ───────────────────────────────────────────────────────────
     @FXML private TabPane tabPane;
@@ -81,13 +91,29 @@ public class MemberDetailController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.bundle = rb;
 
-        // Transactions tab setup (Phase 3 fills data; structure fixed here)
+        // Transactions tab column setup
         colTxDate       .setCellValueFactory(new PropertyValueFactory<>("date"));
-        colTxAmount     .setCellValueFactory(new PropertyValueFactory<>("amount"));
         colTxDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         colTxType       .setCellValueFactory(new PropertyValueFactory<>("type"));
 
-        addFeeButton.setDisable(true); // re-enabled in Phase 3
+        // Amount column — formatted with € and colored
+        NumberFormat fmt = NumberFormat.getNumberInstance(localeService.getCurrentLocale());
+        fmt.setMinimumFractionDigits(2);
+        fmt.setMaximumFractionDigits(2);
+
+        colTxAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        colTxAmount.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(BigDecimal amount, boolean empty) {
+                super.updateItem(amount, empty);
+                if (empty || amount == null) { setText(null); setStyle(""); return; }
+                Transaction tx = (Transaction) getTableRow().getItem();
+                setText("\u20ac " + fmt.format(amount));
+                String color = (tx != null && tx.getType() == Transaction.TransactionType.INCOME)
+                        ? "#5C7A3E" : "#8B3A2A";
+                setStyle("-fx-alignment: CENTER-RIGHT; -fx-text-fill: " + color + ";");
+            }
+        });
 
         // Populate status and payment method combo boxes
         statusComboBox.setItems(FXCollections.observableArrayList(MemberStatus.values()));
@@ -106,14 +132,15 @@ public class MemberDetailController implements Initializable {
         this.currentMember = member;
         if (member != null) {
             populateForm(member);
-            // Show delete button only when the member has no transactions
             boolean deletable = memberService.canDelete(member.getId());
             deleteButton.setVisible(deletable);
             deleteButton.setManaged(deletable);
+            addFeeButton.setDisable(false);
         } else {
             clearForm();
             deleteButton.setVisible(false);
             deleteButton.setManaged(false);
+            addFeeButton.setDisable(true);
         }
         loadTransactions();
     }
@@ -182,12 +209,19 @@ public class MemberDetailController implements Initializable {
             txBalanceLabel.setText("");
             return;
         }
+
         txMemberNameLabel.setText(nullSafe(currentMember.getFullName()));
-        List<Transaction> txs = memberService.getTransactionsByMember(currentMember.getId());
+
+        List<Transaction> txs = financialService.findByMember(currentMember.getId());
         transactionsTable.setItems(FXCollections.observableArrayList(txs));
         emptyLabel.setVisible(txs.isEmpty());
-        // Balance label left blank for Phase 3
-        txBalanceLabel.setText("");
+
+        // Member contribution total
+        BigDecimal total = financialService.getTotalByMember(currentMember.getId());
+        NumberFormat fmt = NumberFormat.getNumberInstance(localeService.getCurrentLocale());
+        fmt.setMinimumFractionDigits(2);
+        fmt.setMaximumFractionDigits(2);
+        txBalanceLabel.setText("\u20ac " + fmt.format(total.setScale(2, RoundingMode.HALF_UP)));
     }
 
     private ListCell<MemberStatus> statusCell() {
@@ -289,7 +323,6 @@ public class MemberDetailController implements Initializable {
                     memberService.delete(currentMember.getId());
                     mainLayoutController.navigateTo("members");
                 } catch (IllegalStateException e) {
-                    // Guarded in service too — belt-and-suspenders
                     String msg = bundle != null
                             ? bundle.getString("members.delete.hasTransactions")
                             : e.getMessage();
@@ -305,6 +338,51 @@ public class MemberDetailController implements Initializable {
     @FXML
     private void onCancel() {
         mainLayoutController.navigateTo("members");
+    }
+
+    @FXML
+    private void onAddFee() {
+        if (currentMember == null) return;
+        try {
+            FXMLLoader loader = fxmlLoaderFactory.create();
+            URL resource = getClass().getResource("/fxml/TransactionDetail.fxml");
+            if (resource == null) {
+                log.error("TransactionDetail.fxml not found");
+                return;
+            }
+            loader.setLocation(resource);
+            loader.setResources(localeService.getBundle());
+            Node view = loader.load();
+            TransactionDetailController ctrl = loader.getController();
+            ctrl.setPrefilledMember(currentMember);
+            ctrl.setMemberLocked(true);
+            ctrl.setCloseAction(this::reloadMemberDetail);
+            ctrl.setTransaction(null); // new transaction
+            mainLayoutController.showView(view);
+        } catch (Exception e) {
+            log.error("Failed to open transaction detail from member", e);
+        }
+    }
+
+    /** Reload this member's detail view so the transaction tab refreshes. */
+    private void reloadMemberDetail() {
+        if (currentMember == null) {
+            mainLayoutController.navigateTo("members");
+            return;
+        }
+        try {
+            Member refreshed = memberService.findById(currentMember.getId());
+            FXMLLoader loader = fxmlLoaderFactory.create();
+            loader.setLocation(getClass().getResource("/fxml/MemberDetail.fxml"));
+            loader.setResources(localeService.getBundle());
+            Node view = loader.load();
+            MemberDetailController ctrl = loader.getController();
+            ctrl.setMember(refreshed);
+            mainLayoutController.showView(view);
+        } catch (Exception e) {
+            log.error("Failed to reload member detail", e);
+            mainLayoutController.navigateTo("members");
+        }
     }
 
     // ── Utility ───────────────────────────────────────────────────────────────

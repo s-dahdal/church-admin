@@ -10,8 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,10 +23,26 @@ public class FinancialService {
     private final TransactionRepository transactionRepository;
     private final TransactionCategoryRepository categoryRepository;
 
-    // ---- Balance ----
+    // ---- Balance ----------------------------------------------------------------
 
     public BigDecimal getCurrentBalance() {
         return transactionRepository.getCurrentBalance();
+    }
+
+    /** All-time total INCOME. */
+    public BigDecimal getTotalIncomeAll() {
+        return transactionRepository.findAll().stream()
+                .filter(t -> t.getType() == Transaction.TransactionType.INCOME)
+                .map(Transaction::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    /** All-time total EXPENSE. */
+    public BigDecimal getTotalExpenseAll() {
+        return transactionRepository.findAll().stream()
+                .filter(t -> t.getType() == Transaction.TransactionType.EXPENSE)
+                .map(Transaction::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public BigDecimal getTotalIncome(LocalDate from, LocalDate to) {
@@ -35,14 +53,26 @@ public class FinancialService {
         return transactionRepository.sumByTypeAndPeriod(Transaction.TransactionType.EXPENSE, from, to);
     }
 
-    // ---- Transactions ----
+    /**
+     * Net contribution for a single member (INCOME − EXPENSE transactions linked to them).
+     */
+    public BigDecimal getTotalByMember(String memberId) {
+        return transactionRepository.findByMemberId(memberId).stream()
+                .map(t -> t.getType() == Transaction.TransactionType.INCOME
+                        ? t.getAmount() : t.getAmount().negate())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    // ---- Transactions -----------------------------------------------------------
 
     public List<Transaction> findAll() {
         return transactionRepository.findAll();
     }
 
+    /** Last 5 transactions ordered by date descending. */
     public List<Transaction> findRecent() {
-        return transactionRepository.findTop10ByOrderByDateDesc();
+        return transactionRepository.findTop10ByOrderByDateDesc()
+                .stream().limit(5).collect(Collectors.toList());
     }
 
     public List<Transaction> findByPeriod(LocalDate from, LocalDate to) {
@@ -61,6 +91,36 @@ public class FinancialService {
         return transactionRepository.findById(id);
     }
 
+    /**
+     * Flexible filter — all parameters are optional (pass null to skip).
+     * Applies in-memory filtering after a single findAll() call; fine at
+     * current data scale.
+     */
+    public List<Transaction> getFilteredTransactions(
+            LocalDate from,
+            LocalDate to,
+            Transaction.TransactionType type,
+            String categoryId,
+            String memberId,
+            String descriptionQuery) {
+
+        return transactionRepository.findAll().stream()
+                .filter(t -> from == null || !t.getDate().isBefore(from))
+                .filter(t -> to == null   || !t.getDate().isAfter(to))
+                .filter(t -> type == null || t.getType() == type)
+                .filter(t -> categoryId == null || categoryId.isBlank()
+                        || (t.getCategory() != null && categoryId.equals(t.getCategory().getId())))
+                .filter(t -> memberId == null || memberId.isBlank()
+                        || (t.getMember() != null && memberId.equals(t.getMember().getId())))
+                .filter(t -> {
+                    if (descriptionQuery == null || descriptionQuery.isBlank()) return true;
+                    String q = descriptionQuery.toLowerCase();
+                    return t.getDescription() != null && t.getDescription().toLowerCase().contains(q);
+                })
+                .sorted(Comparator.comparing(Transaction::getDate).reversed())
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public Transaction save(Transaction transaction) {
         return transactionRepository.save(transaction);
@@ -71,7 +131,7 @@ public class FinancialService {
         transactionRepository.deleteById(id);
     }
 
-    // ---- Categories ----
+    // ---- Categories -------------------------------------------------------------
 
     public List<TransactionCategory> findAllCategories() {
         return categoryRepository.findAll();
@@ -81,17 +141,29 @@ public class FinancialService {
         return categoryRepository.findByType(type);
     }
 
+    public Optional<TransactionCategory> findCategoryById(String id) {
+        return categoryRepository.findById(id);
+    }
+
     @Transactional
     public TransactionCategory saveCategory(TransactionCategory category) {
         return categoryRepository.save(category);
     }
 
+    /**
+     * Blocks deletion of default categories and categories that have transactions.
+     */
     @Transactional
     public void deleteCategory(String id) {
         TransactionCategory cat = categoryRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found: " + id));
         if (cat.isDefault()) {
-            throw new IllegalStateException("Default categories cannot be deleted");
+            throw new IllegalStateException("category.deleteBlocked.default");
+        }
+        boolean inUse = transactionRepository.findAll().stream()
+                .anyMatch(t -> t.getCategory() != null && id.equals(t.getCategory().getId()));
+        if (inUse) {
+            throw new IllegalStateException("category.deleteBlocked.inUse");
         }
         categoryRepository.deleteById(id);
     }

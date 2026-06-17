@@ -16,12 +16,22 @@
     <!-- Stat cards row -->
     <HBox spacing="16" fillHeight="true">
 
-        <VBox styleClass="stat-card" spacing="4">
+        <VBox styleClass="stat-card" spacing="4" HBox.hgrow="ALWAYS">
             <Label text="%dashboard.balance" styleClass="stat-label"/>
             <Label fx:id="lblBalance" text="€ 0,00" styleClass="stat-value"/>
         </VBox>
 
-        <VBox styleClass="stat-card" spacing="4">
+        <VBox styleClass="stat-card" spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="%balance.income" styleClass="stat-label"/>
+            <Label fx:id="lblIncome" text="€ 0,00" styleClass="stat-value income"/>
+        </VBox>
+
+        <VBox styleClass="stat-card" spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="%balance.expense" styleClass="stat-label"/>
+            <Label fx:id="lblExpense" text="€ 0,00" styleClass="stat-value expense"/>
+        </VBox>
+
+        <VBox styleClass="stat-card" spacing="4" HBox.hgrow="ALWAYS">
             <Label text="%dashboard.activeMembers" styleClass="stat-label"/>
             <Label fx:id="lblActiveMembers" text="0" styleClass="stat-value"/>
         </VBox>
@@ -30,8 +40,16 @@
 
     <!-- Recent transactions -->
     <VBox styleClass="card" spacing="12" VBox.vgrow="ALWAYS">
-        <Label text="%dashboard.recentTransactions"
-               style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+
+        <HBox alignment="CENTER_LEFT">
+            <Label text="%dashboard.recentTransactions"
+                   style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button text="%dashboard.viewAll"
+                    onAction="#onViewAllTransactions"
+                    styleClass="btn-secondary"/>
+        </HBox>
+
         <TableView fx:id="recentTable" VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn fx:id="colDate"   text="%transactions.date"        prefWidth="110"/>
@@ -40,6 +58,7 @@
                 <TableColumn fx:id="colAmount" text="%transactions.amount"      prefWidth="120"/>
             </columns>
         </TableView>
+
     </VBox>
 
 </VBox>

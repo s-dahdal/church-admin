@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.churchadmin.controllers.TransactionDetailController">
+
+    <!-- ===== Center: form content ===== -->
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER">
+            <VBox spacing="16">
+                <padding><Insets top="0" right="0" bottom="16" left="0"/></padding>
+
+                <!-- Page title -->
+                <Label fx:id="pageTitleLabel"
+                       text="%transactions.add"
+                       styleClass="page-title"/>
+
+                <!-- Transaction details card -->
+                <TitledPane text="%transactions.section.details"
+                            collapsible="false" expanded="true"
+                            styleClass="card">
+                    <GridPane hgap="12" vgap="12">
+                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
+                        <columnConstraints>
+                            <ColumnConstraints minWidth="140" prefWidth="140"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+
+                        <!-- Date -->
+                        <Label text="%transactions.date"
+                               GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <DatePicker fx:id="datePicker"
+                                    GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                    maxWidth="Infinity"/>
+
+                        <!-- Type -->
+                        <Label text="%transactions.type"
+                               GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <HBox spacing="8"
+                              GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <ToggleButton fx:id="incomeToggle"
+                                          text="%transactions.type.income"
+                                          styleClass="btn-secondary"/>
+                            <ToggleButton fx:id="expenseToggle"
+                                          text="%transactions.type.expense"
+                                          styleClass="btn-secondary"/>
+                        </HBox>
+
+                        <!-- Category -->
+                        <Label text="%transactions.category"
+                               GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <ComboBox fx:id="categoryComboBox"
+                                  GridPane.columnIndex="1" GridPane.rowIndex="2"
+                                  maxWidth="Infinity"/>
+
+                        <!-- Amount -->
+                        <Label text="%transactions.amount"
+                               GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        <TextField fx:id="amountField"
+                                   promptText="0.00"
+                                   GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                        <!-- Description -->
+                        <Label text="%transactions.description"
+                               GridPane.columnIndex="0" GridPane.rowIndex="4"
+                               GridPane.valignment="TOP"/>
+                        <TextArea fx:id="descriptionArea"
+                                  prefRowCount="3"
+                                  wrapText="true"
+                                  GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                    </GridPane>
+                </TitledPane>
+
+                <!-- Member link card -->
+                <TitledPane text="%transactions.section.member"
+                            collapsible="false" expanded="true"
+                            styleClass="card">
+                    <VBox spacing="10">
+                        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
+
+                        <CheckBox fx:id="linkMemberCheckBox"
+                                  text="%transactions.linkToMember"
+                                  onAction="#onLinkMemberToggle"/>
+
+                        <ComboBox fx:id="memberComboBox"
+                                  maxWidth="Infinity"
+                                  visible="false"
+                                  managed="false"/>
+                    </VBox>
+                </TitledPane>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <!-- ===== Bottom: button bar ===== -->
+    <bottom>
+        <HBox spacing="8" alignment="CENTER_LEFT">
+            <padding><Insets top="12" right="24" bottom="16" left="24"/></padding>
+
+            <Button fx:id="deleteButton"
+                    text="%common.delete"
+                    onAction="#onDelete"
+                    styleClass="btn-danger"
+                    visible="false"
+                    managed="false"/>
+
+            <Pane HBox.hgrow="ALWAYS"/>
+
+            <Button text="%common.cancel"
+                    onAction="#onCancel"
+                    styleClass="btn-secondary"/>
+
+            <Button fx:id="saveButton"
+                    text="%common.save"
+                    onAction="#onSave"
+                    styleClass="btn-primary"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

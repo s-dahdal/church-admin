@@ -241,11 +241,11 @@
                            style="-fx-text-fill: #9CA3AF; -fx-font-style: italic;"
                            visible="true"/>
 
-                    <!-- Add fee (disabled until Phase 3) -->
+                    <!-- Add fee button -->
                     <HBox>
                         <Button fx:id="addFeeButton"
                                 text="%members.transactions.addFee"
-                                disable="true"
+                                onAction="#onAddFee"
                                 styleClass="btn-primary"/>
                     </HBox>
 
