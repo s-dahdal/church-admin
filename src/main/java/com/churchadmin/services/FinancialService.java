@@ -42,8 +42,8 @@ public class FinancialService {
     }
 
     private BigDecimal sumByType(Transaction.TransactionType type) {
-        return transactionRepository.findAll().stream()
-                .filter(t -> t.getType() == type)
+        // Use the plain findAll (no JOIN FETCH needed — only amount field is accessed)
+        return transactionRepository.findByType(type).stream()
                 .map(Transaction::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
@@ -60,13 +60,19 @@ public class FinancialService {
 
     // ---- Transactions -----------------------------------------------------------
 
+    /**
+     * All transactions with category and member eagerly fetched.
+     * Required for UI table cells that display category.name / member.fullName
+     * — accessing lazy proxies after the Hibernate session closes throws
+     * LazyInitializationException and silently blanks the cells.
+     */
     public List<Transaction> findAll() {
-        return transactionRepository.findAll();
+        return transactionRepository.findAllEager();
     }
 
-    /** Last 5 transactions ordered by date descending. */
+    /** Last 5 transactions, associations eagerly fetched for dashboard table. */
     public List<Transaction> findRecent() {
-        return transactionRepository.findTop10ByOrderByDateDesc()
+        return transactionRepository.findTop10EagerOrderByDateDesc()
                 .stream().limit(5).collect(Collectors.toList());
     }
 
@@ -74,8 +80,9 @@ public class FinancialService {
         return transactionRepository.findByDateBetween(from, to);
     }
 
+    /** Member's transactions with category eagerly fetched. */
     public List<Transaction> findByMember(String memberId) {
-        return transactionRepository.findByMemberId(memberId);
+        return transactionRepository.findByMemberIdEager(memberId);
     }
 
     public List<Transaction> findGeneralTransactions() {
@@ -99,7 +106,7 @@ public class FinancialService {
             String memberId,
             String descriptionQuery) {
 
-        return transactionRepository.findAll().stream()
+        return transactionRepository.findAllEager().stream()
                 .filter(t -> from == null || !t.getDate().isBefore(from))
                 .filter(t -> to == null   || !t.getDate().isAfter(to))
                 .filter(t -> type == null || t.getType() == type)
