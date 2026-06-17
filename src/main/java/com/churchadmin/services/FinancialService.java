@@ -25,36 +25,31 @@ public class FinancialService {
 
     // ---- Balance ----------------------------------------------------------------
 
+    /** All-time net balance (INCOME − EXPENSE). */
     public BigDecimal getCurrentBalance() {
-        return transactionRepository.getCurrentBalance();
+        return sumByType(Transaction.TransactionType.INCOME)
+                .subtract(sumByType(Transaction.TransactionType.EXPENSE));
     }
 
     /** All-time total INCOME. */
     public BigDecimal getTotalIncomeAll() {
-        return transactionRepository.findAll().stream()
-                .filter(t -> t.getType() == Transaction.TransactionType.INCOME)
-                .map(Transaction::getAmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return sumByType(Transaction.TransactionType.INCOME);
     }
 
     /** All-time total EXPENSE. */
     public BigDecimal getTotalExpenseAll() {
+        return sumByType(Transaction.TransactionType.EXPENSE);
+    }
+
+    private BigDecimal sumByType(Transaction.TransactionType type) {
         return transactionRepository.findAll().stream()
-                .filter(t -> t.getType() == Transaction.TransactionType.EXPENSE)
+                .filter(t -> t.getType() == type)
                 .map(Transaction::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public BigDecimal getTotalIncome(LocalDate from, LocalDate to) {
-        return transactionRepository.sumByTypeAndPeriod(Transaction.TransactionType.INCOME, from, to);
-    }
-
-    public BigDecimal getTotalExpenses(LocalDate from, LocalDate to) {
-        return transactionRepository.sumByTypeAndPeriod(Transaction.TransactionType.EXPENSE, from, to);
-    }
-
     /**
-     * Net contribution for a single member (INCOME − EXPENSE transactions linked to them).
+     * Net contribution for a single member: INCOME minus EXPENSE for their transactions.
      */
     public BigDecimal getTotalByMember(String memberId) {
         return transactionRepository.findByMemberId(memberId).stream()
