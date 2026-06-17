@@ -1,10 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.churchadmin.controllers.SettingsController"
-      spacing="16" style="-fx-padding: 0;">
-    <Label text="Settings" style="-fx-font-size:22px; -fx-font-weight:bold;"/>
-    <Label text="[Settings screen — coming in next phase]" style="-fx-text-fill: #9CA3AF;"/>
+      spacing="20">
+
+    <padding><Insets top="0" right="0" bottom="0" left="0"/></padding>
+
+    <!-- Page title -->
+    <Label text="%settings.title" styleClass="page-title"/>
+
+    <!-- Language card -->
+    <TitledPane text="%settings.language"
+                collapsible="false" expanded="true"
+                styleClass="card">
+        <GridPane hgap="12" vgap="12">
+            <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
+            <columnConstraints>
+                <ColumnConstraints minWidth="160" prefWidth="160"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <Label text="%settings.language.select"
+                   GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <ComboBox fx:id="languageComboBox"
+                      GridPane.columnIndex="1" GridPane.rowIndex="0"
+                      prefWidth="220"/>
+        </GridPane>
+    </TitledPane>
+
+    <!-- Spacer -->
+    <Pane VBox.vgrow="ALWAYS"/>
+
+    <!-- Save button -->
+    <HBox alignment="CENTER_RIGHT">
+        <Button fx:id="saveButton"
+                text="%settings.save"
+                onAction="#onSave"
+                styleClass="btn-primary"/>
+    </HBox>
+
 </VBox>
