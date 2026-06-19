@@ -1,6 +1,5 @@
 package com.churchadmin.app;
 
-import com.churchadmin.services.SnapshotService;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -46,16 +45,9 @@ public class ChurchAdminApplication extends Application {
         // Ensure ~/.churchadmin/ and subdirs exist before Spring tries to open the DB
         ensureDataDirectories();
 
-        // Boot Spring — all beans wired, Flyway runs migrations, JPA opens SQLite
+        // Boot Spring — all beans wired, Flyway runs migrations, JPA opens SQLite.
+        // StartupSnapshotJob (@PostConstruct) handles the daily auto-snapshot.
         springContext = SpringApplication.run(ChurchAdminApplication.class);
-
-        // Daily snapshot on startup
-        try {
-            SnapshotService snapshotService = springContext.getBean(SnapshotService.class);
-            snapshotService.createDailySnapshotIfNeeded();
-        } catch (Exception e) {
-            log.warn("Daily snapshot failed (non-fatal): {}", e.getMessage());
-        }
     }
 
     @Override

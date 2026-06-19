@@ -421,6 +421,120 @@
     -fx-font-size: 12px;
 }
 
+/* ---- Button disabled variants ---- */
+.btn-primary:disabled {
+    -fx-background-color: #D4C4A0;
+    -fx-text-fill: #A08050;
+    -fx-cursor: default;
+}
+
+.btn-secondary:disabled {
+    -fx-border-color: #D4C4A0;
+    -fx-text-fill: #A08050;
+    -fx-cursor: default;
+}
+
+.btn-danger:disabled {
+    -fx-background-color: #C4A090;
+    -fx-text-fill: #F0E4DF;
+    -fx-cursor: default;
+}
+
+/* ---- Snapshots / generic screen chrome ---- */
+
+.screen-root {
+    -fx-padding: 0;
+}
+
+.screen-header {
+    -fx-padding: 0 0 12 0;
+    -fx-border-color: transparent transparent #E8DFC8 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.screen-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #3B2A0E;
+}
+
+.screen-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #7A6040;
+}
+
+/* ---- Data table (alias for .table-view with slight override) ---- */
+.data-table {
+    -fx-background-color: transparent;
+    -fx-border-color: #D4C4A0;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-table-cell-border-color: #E8DFC8;
+}
+
+.data-table .column-header-background {
+    -fx-background-color: #F5EFE0;
+    -fx-border-color: transparent transparent #D4C4A0 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.data-table .column-header {
+    -fx-background-color: #F5EFE0;
+}
+
+.data-table .column-header .label {
+    -fx-text-fill: #6B4F12;
+    -fx-font-weight: 500;
+}
+
+.data-table .filler {
+    -fx-background-color: #F5EFE0;
+}
+
+.data-table .table-row-cell:selected,
+.data-table .table-row-cell:focused:selected {
+    -fx-background-color: #EDE0C4;
+    -fx-text-fill: #3B2A0E;
+}
+
+/* ---- Table placeholder ---- */
+.table-placeholder {
+    -fx-text-fill: #A08050;
+    -fx-font-size: 13px;
+}
+
+/* ---- Status bar ---- */
+.status-bar {
+    -fx-padding: 6 0 0 0;
+    -fx-min-height: 28;
+}
+
+.status-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #7A6040;
+}
+
+.status-label.status-ok {
+    -fx-text-fill: #5C7A3E;
+}
+
+.status-label.status-error {
+    -fx-text-fill: #8B3A2A;
+    -fx-font-weight: 500;
+}
+
+/* ---- Small spinner (ProgressIndicator) ---- */
+.small-spinner {
+    -fx-pref-width: 20;
+    -fx-pref-height: 20;
+    -fx-max-width: 20;
+    -fx-max-height: 20;
+}
+
+.small-spinner .arc {
+    -fx-stroke: #C9A84C;
+}
+
 /* ---- Status badges ---- */
 .badge-active {
     -fx-background-color: #E8F0E0;

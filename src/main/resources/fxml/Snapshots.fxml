@@ -1,10 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.churchadmin.controllers.SnapshotsController"
-      spacing="16" style="-fx-padding: 0;">
-    <Label text="Snapshots" style="-fx-font-size:22px; -fx-font-weight:bold;"/>
-    <Label text="[Snapshots screen — coming in next phase]" style="-fx-text-fill: #9CA3AF;"/>
+      styleClass="screen-root"
+      spacing="12">
+
+    <!-- ===== Header ===== -->
+    <HBox styleClass="screen-header" alignment="CENTER_LEFT" spacing="12">
+        <VBox spacing="2">
+            <Label text="%snapshots.title"    styleClass="screen-title"/>
+            <Label text="%snapshots.subtitle" styleClass="screen-subtitle"/>
+        </VBox>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnImportExternal"
+                text="%snapshots.btn.import"
+                onAction="#onImportExternal"
+                styleClass="btn-secondary"/>
+        <Button fx:id="btnCreateSnapshot"
+                text="%snapshots.btn.create"
+                onAction="#onCreateSnapshot"
+                styleClass="btn-primary"/>
+    </HBox>
+
+    <!-- ===== Snapshot table ===== -->
+    <TableView fx:id="snapshotsTable" VBox.vgrow="ALWAYS" styleClass="data-table">
+        <placeholder>
+            <Label text="%snapshots.empty" styleClass="table-placeholder"/>
+        </placeholder>
+        <columns>
+            <TableColumn fx:id="colDateTime" text="%snapshots.col.datetime" prefWidth="200"/>
+            <TableColumn fx:id="colType"     text="%snapshots.col.type"     prefWidth="130"/>
+            <TableColumn fx:id="colSize"     text="%snapshots.col.size"     prefWidth="100"/>
+            <TableColumn fx:id="colActions"  text="%snapshots.col.actions"  prefWidth="290"/>
+        </columns>
+    </TableView>
+
+    <!-- ===== Footer status bar ===== -->
+    <HBox styleClass="status-bar" alignment="CENTER_LEFT" spacing="8">
+        <ProgressIndicator fx:id="progressIndicator"
+                           styleClass="small-spinner"
+                           visible="false"
+                           maxHeight="20"
+                           maxWidth="20"/>
+        <Label fx:id="statusLabel" styleClass="status-label"/>
+    </HBox>
+
 </VBox>

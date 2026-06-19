@@ -83,7 +83,13 @@ public class ImportService {
         }
 
         // --- Pre-import snapshot ---
-        snapshotService.createPreImportSnapshot();
+        try {
+            snapshotService.createSnapshot(
+                    com.churchadmin.models.enums.SnapshotType.PRE_IMPORT,
+                    System.getProperty("user.name", "import"));
+        } catch (Exception ex) {
+            log.warn("Pre-import snapshot failed (non-fatal): {}", ex.getMessage());
+        }
 
         // --- Merge all entity types ---
         List<Map<String, Object>> rawCategories = (List<Map<String, Object>>) envelope.getOrDefault("categories", List.of());
