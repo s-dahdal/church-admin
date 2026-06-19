@@ -5,6 +5,7 @@ import com.churchadmin.models.Member;
 import com.churchadmin.models.Transaction;
 import com.churchadmin.models.enums.MemberStatus;
 import com.churchadmin.models.enums.PaymentMethod;
+import com.churchadmin.models.enums.TransactionType;
 import com.churchadmin.services.FinancialService;
 import com.churchadmin.services.LocaleService;
 import com.churchadmin.services.MemberService;
@@ -75,7 +76,7 @@ public class MemberDetailController implements Initializable {
     @FXML private TableColumn<Transaction, LocalDate>     colTxDate;
     @FXML private TableColumn<Transaction, BigDecimal>    colTxAmount;
     @FXML private TableColumn<Transaction, String>        colTxDescription;
-    @FXML private TableColumn<Transaction, Transaction.TransactionType> colTxType;
+    @FXML private TableColumn<Transaction, TransactionType> colTxType;
     @FXML private Label                       emptyLabel;
     @FXML private Button                      addFeeButton;
     @FXML private Button                      saveButton;
@@ -109,7 +110,7 @@ public class MemberDetailController implements Initializable {
                 if (empty || amount == null) { setText(null); setStyle(""); return; }
                 Transaction tx = (Transaction) getTableRow().getItem();
                 setText("\u20ac " + fmt.format(amount));
-                String color = (tx != null && tx.getType() == Transaction.TransactionType.INCOME)
+                String color = (tx != null && tx.getType() == TransactionType.INCOME)
                         ? "#5C7A3E" : "#8B3A2A";
                 setStyle("-fx-alignment: CENTER-RIGHT; -fx-text-fill: " + color + ";");
             }

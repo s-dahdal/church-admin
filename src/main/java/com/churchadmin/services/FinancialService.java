@@ -2,6 +2,7 @@ package com.churchadmin.services;
 
 import com.churchadmin.models.Transaction;
 import com.churchadmin.models.TransactionCategory;
+import com.churchadmin.models.enums.TransactionType;
 import com.churchadmin.repositories.TransactionCategoryRepository;
 import com.churchadmin.repositories.TransactionRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,21 +28,21 @@ public class FinancialService {
 
     /** All-time net balance (INCOME − EXPENSE). */
     public BigDecimal getCurrentBalance() {
-        return sumByType(Transaction.TransactionType.INCOME)
-                .subtract(sumByType(Transaction.TransactionType.EXPENSE));
+        return sumByType(TransactionType.INCOME)
+                .subtract(sumByType(TransactionType.EXPENSE));
     }
 
     /** All-time total INCOME. */
     public BigDecimal getTotalIncomeAll() {
-        return sumByType(Transaction.TransactionType.INCOME);
+        return sumByType(TransactionType.INCOME);
     }
 
     /** All-time total EXPENSE. */
     public BigDecimal getTotalExpenseAll() {
-        return sumByType(Transaction.TransactionType.EXPENSE);
+        return sumByType(TransactionType.EXPENSE);
     }
 
-    private BigDecimal sumByType(Transaction.TransactionType type) {
+    private BigDecimal sumByType(TransactionType type) {
         // Use the plain findAll (no JOIN FETCH needed — only amount field is accessed)
         return transactionRepository.findByType(type).stream()
                 .map(Transaction::getAmount)
@@ -53,7 +54,7 @@ public class FinancialService {
      */
     public BigDecimal getTotalByMember(String memberId) {
         return transactionRepository.findByMemberId(memberId).stream()
-                .map(t -> t.getType() == Transaction.TransactionType.INCOME
+                .map(t -> t.getType() == TransactionType.INCOME
                         ? t.getAmount() : t.getAmount().negate())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
@@ -101,7 +102,7 @@ public class FinancialService {
     public List<Transaction> getFilteredTransactions(
             LocalDate from,
             LocalDate to,
-            Transaction.TransactionType type,
+            TransactionType type,
             String categoryId,
             String memberId,
             String descriptionQuery) {
@@ -139,7 +140,7 @@ public class FinancialService {
         return categoryRepository.findAll();
     }
 
-    public List<TransactionCategory> findCategoriesByType(Transaction.TransactionType type) {
+    public List<TransactionCategory> findCategoriesByType(TransactionType type) {
         return categoryRepository.findByType(type);
     }
 

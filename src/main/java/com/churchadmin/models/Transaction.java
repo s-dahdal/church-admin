@@ -1,5 +1,6 @@
 package com.churchadmin.models;
 
+import com.churchadmin.models.enums.TransactionType;
 import com.churchadmin.utils.ChecksumService;
 import jakarta.persistence.*;
 import lombok.*;
@@ -56,7 +57,4 @@ public class Transaction extends BaseEntity {
         return s != null ? s : "";
     }
 
-    public enum TransactionType {
-        INCOME, EXPENSE
-    }
 }

@@ -1,5 +1,6 @@
 package com.churchadmin.models;
 
+import com.churchadmin.models.enums.TransactionType;
 import com.churchadmin.utils.ChecksumService;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,7 +22,7 @@ public class TransactionCategory extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Transaction.TransactionType type;
+    private TransactionType type;
 
     /** Seeded default categories cannot be deleted by admins */
     @Column(name = "is_default", nullable = false)

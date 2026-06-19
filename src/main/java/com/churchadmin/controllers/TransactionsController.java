@@ -3,6 +3,7 @@ package com.churchadmin.controllers;
 import com.churchadmin.config.JavaFXConfig;
 import com.churchadmin.models.Transaction;
 import com.churchadmin.models.TransactionCategory;
+import com.churchadmin.models.enums.TransactionType;
 import com.churchadmin.services.FinancialService;
 import com.churchadmin.services.LocaleService;
 import javafx.collections.FXCollections;
@@ -54,7 +55,7 @@ public class TransactionsController implements Initializable {
     @FXML private TableColumn<Transaction, LocalDate>             colDate;
     @FXML private TableColumn<Transaction, String>                colDescription;
     @FXML private TableColumn<Transaction, TransactionCategory>   colCategory;
-    @FXML private TableColumn<Transaction, Transaction.TransactionType> colType;
+    @FXML private TableColumn<Transaction, TransactionType> colType;
     @FXML private TableColumn<Transaction, BigDecimal>            colAmount;
     @FXML private TableColumn<Transaction, String> colMember;
 
@@ -103,10 +104,10 @@ public class TransactionsController implements Initializable {
         // Type column — localised label
         colType.setCellFactory(col -> new TableCell<>() {
             @Override
-            protected void updateItem(Transaction.TransactionType type, boolean empty) {
+            protected void updateItem(TransactionType type, boolean empty) {
                 super.updateItem(type, empty);
                 if (empty || type == null) { setText(null); setStyle(""); return; }
-                if (type == Transaction.TransactionType.INCOME) {
+                if (type == TransactionType.INCOME) {
                     setText(bundle.containsKey("transactions.type.income")
                             ? bundle.getString("transactions.type.income") : "Income");
                     setStyle("-fx-text-fill: #5C7A3E; -fx-font-weight: bold;");
@@ -133,7 +134,7 @@ public class TransactionsController implements Initializable {
                 if (empty || amount == null) { setText(null); setStyle("-fx-alignment: CENTER-RIGHT;"); return; }
                 Transaction tx = (Transaction) getTableRow().getItem();
                 setText("\u20ac " + fmt.format(amount));
-                String color = (tx != null && tx.getType() == Transaction.TransactionType.INCOME)
+                String color = (tx != null && tx.getType() == TransactionType.INCOME)
                         ? "#5C7A3E" : "#8B3A2A";
                 setStyle("-fx-alignment: CENTER-RIGHT; -fx-text-fill: " + color + "; -fx-font-weight: bold;");
             }
@@ -208,13 +209,13 @@ public class TransactionsController implements Initializable {
         String incomeLabel = bundle.containsKey("transactions.type.income")
                 ? bundle.getString("transactions.type.income") : "Income";
 
-        Transaction.TransactionType typeFilter = null;
+        TransactionType typeFilter = null;
         if (typeSel != null && !typeSel.equals(all)) {
             typeFilter = typeSel.equals(incomeLabel)
-                    ? Transaction.TransactionType.INCOME
-                    : Transaction.TransactionType.EXPENSE;
+                    ? TransactionType.INCOME
+                    : TransactionType.EXPENSE;
         }
-        final Transaction.TransactionType typeFilterFinal = typeFilter;
+        final TransactionType typeFilterFinal = typeFilter;
 
         String catFilterFinal = (catSel != null && !catSel.equals(all)) ? catSel : null;
 
@@ -242,12 +243,12 @@ public class TransactionsController implements Initializable {
         fmt.setMaximumFractionDigits(2);
 
         BigDecimal income = transactions.stream()
-                .filter(t -> t.getType() == Transaction.TransactionType.INCOME)
+                .filter(t -> t.getType() == TransactionType.INCOME)
                 .map(Transaction::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         BigDecimal expense = transactions.stream()
-                .filter(t -> t.getType() == Transaction.TransactionType.EXPENSE)
+                .filter(t -> t.getType() == TransactionType.EXPENSE)
                 .map(Transaction::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 

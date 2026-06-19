@@ -1,6 +1,7 @@
 package com.churchadmin.controllers;
 
 import com.churchadmin.models.Transaction;
+import com.churchadmin.models.enums.TransactionType;
 import com.churchadmin.services.FinancialService;
 import com.churchadmin.services.LocaleService;
 import com.churchadmin.services.MemberService;
@@ -33,7 +34,7 @@ public class DashboardController implements Initializable {
     @FXML private TableView<Transaction> recentTable;
     @FXML private TableColumn<Transaction, String>     colDate;
     @FXML private TableColumn<Transaction, String>     colDesc;
-    @FXML private TableColumn<Transaction, Transaction.TransactionType> colType;
+    @FXML private TableColumn<Transaction, TransactionType> colType;
     @FXML private TableColumn<Transaction, BigDecimal> colAmount;
 
     private final FinancialService financialService;
@@ -57,10 +58,10 @@ public class DashboardController implements Initializable {
         colType.setCellValueFactory(new PropertyValueFactory<>("type"));
         colType.setCellFactory(col -> new TableCell<>() {
             @Override
-            protected void updateItem(Transaction.TransactionType type, boolean empty) {
+            protected void updateItem(TransactionType type, boolean empty) {
                 super.updateItem(type, empty);
                 if (empty || type == null) { setText(null); setStyle(""); return; }
-                if (type == Transaction.TransactionType.INCOME) {
+                if (type == TransactionType.INCOME) {
                     setText(bundle != null && bundle.containsKey("transactions.type.income")
                             ? bundle.getString("transactions.type.income") : "Income");
                     setStyle("-fx-text-fill: #5C7A3E;");
@@ -84,7 +85,7 @@ public class DashboardController implements Initializable {
                 if (empty || amount == null) { setText(null); setStyle("-fx-alignment: CENTER-RIGHT;"); return; }
                 Transaction tx = (Transaction) getTableRow().getItem();
                 setText("\u20ac " + fmt.format(amount.setScale(2, RoundingMode.HALF_UP)));
-                String color = (tx != null && tx.getType() == Transaction.TransactionType.INCOME)
+                String color = (tx != null && tx.getType() == TransactionType.INCOME)
                         ? "#5C7A3E" : "#8B3A2A";
                 setStyle("-fx-alignment: CENTER-RIGHT; -fx-text-fill: " + color + ";");
             }

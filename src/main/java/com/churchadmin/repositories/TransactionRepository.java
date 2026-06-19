@@ -1,6 +1,7 @@
 package com.churchadmin.repositories;
 
 import com.churchadmin.models.Transaction;
+import com.churchadmin.models.enums.TransactionType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -41,7 +42,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
 
     boolean existsByMemberId(String memberId);
 
-    List<Transaction> findByType(Transaction.TransactionType type);
+    List<Transaction> findByType(TransactionType type);
 
     List<Transaction> findByDateBetween(LocalDate from, LocalDate to);
 

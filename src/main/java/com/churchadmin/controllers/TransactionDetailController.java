@@ -4,6 +4,7 @@ import com.churchadmin.config.JavaFXConfig;
 import com.churchadmin.models.Member;
 import com.churchadmin.models.Transaction;
 import com.churchadmin.models.TransactionCategory;
+import com.churchadmin.models.enums.TransactionType;
 import com.churchadmin.services.FinancialService;
 import com.churchadmin.services.LocaleService;
 import com.churchadmin.services.MemberService;
@@ -122,7 +123,7 @@ public class TransactionDetailController implements Initializable {
 
         // Income selected by default
         incomeToggle.setSelected(true);
-        refreshCategories(Transaction.TransactionType.INCOME);
+        refreshCategories(TransactionType.INCOME);
 
         typeToggleGroup.selectedToggleProperty().addListener((obs, old, selected) -> {
             if (selected == null) {
@@ -191,7 +192,7 @@ public class TransactionDetailController implements Initializable {
         });
     }
 
-    private void refreshCategories(Transaction.TransactionType type) {
+    private void refreshCategories(TransactionType type) {
         TransactionCategory previous = categoryComboBox.getValue();
         List<TransactionCategory> cats = financialService.findCategoriesByType(type);
         categoryComboBox.setItems(FXCollections.observableArrayList(cats));
@@ -212,12 +213,12 @@ public class TransactionDetailController implements Initializable {
     private void populateForm(Transaction t) {
         datePicker.setValue(t.getDate() != null ? t.getDate() : LocalDate.now());
 
-        if (t.getType() == Transaction.TransactionType.EXPENSE) {
+        if (t.getType() == TransactionType.EXPENSE) {
             expenseToggle.setSelected(true);
-            refreshCategories(Transaction.TransactionType.EXPENSE);
+            refreshCategories(TransactionType.EXPENSE);
         } else {
             incomeToggle.setSelected(true);
-            refreshCategories(Transaction.TransactionType.INCOME);
+            refreshCategories(TransactionType.INCOME);
         }
 
         if (t.getCategory() != null) {
@@ -244,7 +245,7 @@ public class TransactionDetailController implements Initializable {
     private void clearForm() {
         datePicker.setValue(LocalDate.now());
         incomeToggle.setSelected(true);
-        refreshCategories(Transaction.TransactionType.INCOME);
+        refreshCategories(TransactionType.INCOME);
         amountField.setText("");
         descriptionArea.setText("");
         linkMemberCheckBox.setSelected(false);
@@ -266,15 +267,15 @@ public class TransactionDetailController implements Initializable {
             // Default to INCOME when opened from member tab
             if (currentTransaction == null) {
                 incomeToggle.setSelected(true);
-                refreshCategories(Transaction.TransactionType.INCOME);
+                refreshCategories(TransactionType.INCOME);
             }
         }
     }
 
-    private Transaction.TransactionType getSelectedType() {
+    private TransactionType getSelectedType() {
         return expenseToggle.isSelected()
-                ? Transaction.TransactionType.EXPENSE
-                : Transaction.TransactionType.INCOME;
+                ? TransactionType.EXPENSE
+                : TransactionType.INCOME;
     }
 
     private BigDecimal parseAmount(String text) {
