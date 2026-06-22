@@ -249,7 +249,7 @@
                             <input>target/</input>
                             <mainJar>church-admin-1.0.0.jar</mainJar>
                             <type>DMG</type>
-                            <icon>src/main/resources/images/logo.png</icon>
+                            <icon>src/main/resources/images/logo.icns</icon>
                         </configuration>
                     </plugin>
                 </plugins>
