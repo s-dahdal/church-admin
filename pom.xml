@@ -242,11 +242,13 @@
                         <artifactId>jpackage-maven-plugin</artifactId>
                         <version>1.6.0</version>
                         <configuration>
-                            <name>Church Admin</name>
+                            <name>Heilige Barbara Parochie</name>
                             <appVersion>1.0</appVersion>
                             <vendor>Samer Dahdal</vendor>
                             <destination>target/dist</destination>
+                            <input>target/</input>
                             <mainJar>church-admin-1.0.0.jar</mainJar>
+                            <type>DMG</type>
                             <icon>src/main/resources/images/logo.png</icon>
                         </configuration>
                     </plugin>
