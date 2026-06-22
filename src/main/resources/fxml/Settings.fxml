@@ -2,6 +2,8 @@
 
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <?import javafx.geometry.Insets?>
 
 <VBox xmlns="http://javafx.com/javafx"
@@ -31,6 +33,23 @@
                       GridPane.columnIndex="1" GridPane.rowIndex="0"
                       prefWidth="220"/>
         </GridPane>
+    </TitledPane>
+
+    <!-- About card -->
+    <TitledPane text="%settings.about"
+                collapsible="false" expanded="true"
+                styleClass="card">
+        <VBox spacing="8">
+            <padding><Insets top="12" right="12" bottom="12" left="12"/></padding>
+            <ImageView fitWidth="80" preserveRatio="true">
+                <image><Image url="@/images/logo.png"/></image>
+            </ImageView>
+            <Label text="%settings.about.appName" styleClass="section-heading"/>
+            <Label text="%settings.about.description" wrapText="true" styleClass="muted-label"/>
+            <Separator/>
+            <Label text="%settings.about.developer" styleClass="muted-label"/>
+            <Label text="%settings.about.version"   styleClass="muted-label"/>
+        </VBox>
     </TitledPane>
 
     <!-- Spacer -->

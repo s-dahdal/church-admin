@@ -31,6 +31,10 @@ public class JavaFXConfig {
         return () -> {
             FXMLLoader loader = new FXMLLoader();
             loader.setControllerFactory(applicationContext::getBean);
+            // Explicitly pin the classloader so FXMLLoader never falls back to
+            // Thread.currentThread().getContextClassLoader(), which AWT Toolkit
+            // initialisation can null out on the JavaFX Application Thread.
+            loader.setClassLoader(applicationContext.getClassLoader());
             return loader;
         };
     }

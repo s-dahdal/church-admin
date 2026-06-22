@@ -50,6 +50,9 @@ public class MainWindow {
             );
         }
 
+        stage.getIcons().add(
+                new Image(getClass().getResourceAsStream("/images/logo.png"))
+        );
         stage.setTitle(localeService.get("app.title"));
         stage.setScene(scene);
         stage.setMinWidth(1024);

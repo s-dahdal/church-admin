@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import javax.imageio.ImageIO;
+import java.awt.Taskbar;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -52,6 +54,20 @@ public class ChurchAdminApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        // Set the macOS Dock icon / Windows taskbar icon via AWT Taskbar API.
+        // AWT Toolkit initialisation (triggered by Taskbar.getTaskbar()) nulls out
+        // the JavaFX Application Thread's context classloader as a side-effect, which
+        // breaks every subsequent FXMLLoader call.  Capture and restore it around the
+        // AWT call to avoid the NullPointerException in FXMLLoader.getClassLoader().
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        if (Taskbar.isTaskbarSupported()) {
+            Taskbar tb = Taskbar.getTaskbar();
+            if (tb.isSupported(Taskbar.Feature.ICON_IMAGE)) {
+                tb.setIconImage(ImageIO.read(
+                        getClass().getResourceAsStream("/images/logo.png")));
+            }
+        }
+        Thread.currentThread().setContextClassLoader(cl);
         MainWindow mainWindow = springContext.getBean(MainWindow.class);
         mainWindow.show(primaryStage);
     }

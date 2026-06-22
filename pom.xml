@@ -186,4 +186,74 @@
         </plugins>
     </build>
 
+    <profiles>
+
+        <!-- Windows installer (.exe / .msi) -->
+        <profile>
+            <id>win</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.panteleyev</groupId>
+                        <artifactId>jpackage-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <configuration>
+                            <name>Church Admin</name>
+                            <appVersion>1.0</appVersion>
+                            <vendor>Samer Dahdal</vendor>
+                            <destination>target/dist</destination>
+                            <mainJar>church-admin-1.0.0.jar</mainJar>
+                            <icon>src/main/resources/images/logo.ico</icon>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Linux installer (.deb / .rpm) -->
+        <profile>
+            <id>linux</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.panteleyev</groupId>
+                        <artifactId>jpackage-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <configuration>
+                            <name>Church Admin</name>
+                            <appVersion>1.0</appVersion>
+                            <vendor>Samer Dahdal</vendor>
+                            <destination>target/dist</destination>
+                            <mainJar>church-admin-1.0.0.jar</mainJar>
+                            <icon>src/main/resources/images/logo-48.png</icon>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- macOS installer (.dmg / .pkg) -->
+        <profile>
+            <id>mac</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.panteleyev</groupId>
+                        <artifactId>jpackage-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <configuration>
+                            <name>Church Admin</name>
+                            <appVersion>1.0</appVersion>
+                            <vendor>Samer Dahdal</vendor>
+                            <destination>target/dist</destination>
+                            <mainJar>church-admin-1.0.0.jar</mainJar>
+                            <icon>src/main/resources/images/logo.png</icon>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
+
 </project>

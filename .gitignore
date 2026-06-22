@@ -1,5 +1,8 @@
-target/
 .idea/
+target/
+data/
+snapshots/
+
 .DS_Store
 *.db
 *.db-shm
