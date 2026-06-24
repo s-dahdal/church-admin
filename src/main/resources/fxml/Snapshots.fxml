@@ -17,6 +17,10 @@
             <Label text="%snapshots.subtitle" styleClass="screen-subtitle"/>
         </VBox>
         <Pane HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnMergeImport"
+                text="%snapshots.button.merge.import"
+                onAction="#onMergeImport"
+                styleClass="btn-secondary"/>
         <Button fx:id="btnImportExternal"
                 text="%snapshots.btn.import"
                 onAction="#onImportExternal"
@@ -36,7 +40,7 @@
             <TableColumn fx:id="colDateTime" text="%snapshots.col.datetime" prefWidth="200"/>
             <TableColumn fx:id="colType"     text="%snapshots.col.type"     prefWidth="130"/>
             <TableColumn fx:id="colSize"     text="%snapshots.col.size"     prefWidth="100"/>
-            <TableColumn fx:id="colActions"  text="%snapshots.col.actions"  prefWidth="290"/>
+            <TableColumn fx:id="colActions"  text="%snapshots.col.actions"  prefWidth="350"/>
         </columns>
     </TableView>
 

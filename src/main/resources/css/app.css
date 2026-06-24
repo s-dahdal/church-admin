@@ -557,3 +557,31 @@
     -fx-padding: 2 8;
     -fx-font-size: 11px;
 }
+
+/* ---- Merge Import — summary cards ---- */
+.summary-card {
+    -fx-background-color: #F5EFE0;
+    -fx-background-radius: 8;
+    -fx-border-color: #D4C4A0;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-padding: 14 20;
+    -fx-min-width: 140;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 4, 0, 0, 1);
+}
+
+.summary-card-warn {
+    -fx-border-color: #C9A84C;
+    -fx-border-width: 2;
+}
+
+/* ---- Merge Import — conflict cell highlight ---- */
+.conflict-cell {
+    -fx-background-color: #F7EDCC;
+}
+
+.conflict-cell-label {
+    -fx-text-fill: #3B2A0E;
+    -fx-font-family: "Courier New", "Consolas", monospace;
+    -fx-font-size: 12px;
+}

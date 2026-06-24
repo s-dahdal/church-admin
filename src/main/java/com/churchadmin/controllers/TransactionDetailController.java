@@ -77,21 +77,40 @@ public class TransactionDetailController implements Initializable {
 
     // ── Public API ────────────────────────────────────────────────────────────
 
-    /** Call after load() to populate an existing transaction for editing. */
+    /** Call after load() to populate an existing transaction for viewing/deleting. */
     public void setTransaction(Transaction transaction) {
         this.currentTransaction = transaction;
         if (transaction != null) {
             populateForm(transaction);
             deleteButton.setVisible(true);
             deleteButton.setManaged(true);
+            saveButton.setVisible(false);
+            saveButton.setManaged(false);
             pageTitleLabel.setText(bundle != null ? bundle.getString("transactions.edit") : "Edit Transaction");
+            setFormEditable(false);
         } else {
             clearForm();
             deleteButton.setVisible(false);
             deleteButton.setManaged(false);
+            saveButton.setVisible(true);
+            saveButton.setManaged(true);
             pageTitleLabel.setText(bundle != null ? bundle.getString("transactions.add") : "Add Transaction");
+            setFormEditable(true);
         }
         applyMemberLock();
+    }
+
+    private void setFormEditable(boolean editable) {
+        datePicker.setDisable(!editable);
+        incomeToggle.setDisable(!editable);
+        expenseToggle.setDisable(!editable);
+        categoryComboBox.setDisable(!editable);
+        amountField.setEditable(editable);
+        amountField.setDisable(!editable);
+        descriptionArea.setEditable(editable);
+        descriptionArea.setDisable(!editable);
+        linkMemberCheckBox.setDisable(!editable);
+        memberComboBox.setDisable(!editable);
     }
 
     /**

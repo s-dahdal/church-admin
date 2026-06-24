@@ -165,6 +165,23 @@ public class SnapshotService {
     }
 
     /**
+     * Parse and validate an external snapshot file without copying it to the
+     * snapshots directory.  Used by the Merge Import flow, which needs only the
+     * payload — not a permanent copy.
+     *
+     * @throws IOException if the file cannot be parsed or has an incompatible schema version
+     */
+    public SnapshotPayload parseSnapshotPayload(Path externalFile) throws IOException {
+        SnapshotPayload payload = objectMapper.readValue(externalFile.toFile(), SnapshotPayload.class);
+        if (payload.getSchemaVersion() > CURRENT_SCHEMA_VERSION) {
+            throw new IOException(
+                    "Incompatible snapshot schema version " + payload.getSchemaVersion()
+                    + " (current: " + CURRENT_SCHEMA_VERSION + ")");
+        }
+        return payload;
+    }
+
+    /**
      * Parse an external JSON file as a snapshot payload, validate its schema
      * version, copy it into the snapshots directory with an {@code IMPORTED_}
      * prefix, and return a {@link SnapshotEntry} for the new file.

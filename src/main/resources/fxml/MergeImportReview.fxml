@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.churchadmin.controllers.MergeImportReviewController"
+      styleClass="screen-root"
+      spacing="12">
+
+    <!-- ===== Header ===== -->
+    <HBox styleClass="screen-header" alignment="CENTER_LEFT" spacing="12">
+        <VBox spacing="2">
+            <Label text="%merge.review.title"  styleClass="screen-title"/>
+            <Label fx:id="lblSubtitle"          styleClass="screen-subtitle"/>
+        </VBox>
+    </HBox>
+
+    <!-- ===== Summary bar ===== -->
+    <HBox spacing="12" alignment="CENTER_LEFT">
+
+        <!-- New Members -->
+        <VBox styleClass="summary-card" alignment="CENTER" spacing="4" minWidth="140">
+            <Label fx:id="lblNewMembersCount" text="0" styleClass="stat-value"/>
+            <Label text="%merge.summary.new.members" styleClass="stat-label"/>
+        </VBox>
+
+        <!-- New Transactions -->
+        <VBox styleClass="summary-card" alignment="CENTER" spacing="4" minWidth="140">
+            <Label fx:id="lblNewTransactionsCount" text="0" styleClass="stat-value"/>
+            <Label text="%merge.summary.new.transactions" styleClass="stat-label"/>
+        </VBox>
+
+        <!-- Skipped -->
+        <VBox styleClass="summary-card" alignment="CENTER" spacing="4" minWidth="140">
+            <Label fx:id="lblSkippedCount" text="0" styleClass="stat-value"/>
+            <Label text="%merge.summary.skipped" styleClass="stat-label"/>
+        </VBox>
+
+        <!-- Pending Review (amber highlight applied in controller when count > 0) -->
+        <VBox fx:id="cardPending" styleClass="summary-card" alignment="CENTER" spacing="4" minWidth="140">
+            <Label fx:id="lblPendingCount" text="0" styleClass="stat-value"/>
+            <Label text="%merge.summary.pending" styleClass="stat-label"/>
+        </VBox>
+
+    </HBox>
+
+    <!-- ===== Members pending review ===== -->
+    <TableView fx:id="tblPendingMembers" VBox.vgrow="ALWAYS" styleClass="data-table">
+        <placeholder>
+            <Label text="%merge.no.pending" styleClass="table-placeholder"/>
+        </placeholder>
+    </TableView>
+
+    <!-- ===== Bottom action bar ===== -->
+    <HBox spacing="8" alignment="CENTER_LEFT">
+        <Button fx:id="btnApply"     text="%merge.action.apply"      onAction="#onApply"     styleClass="btn-primary"/>
+        <Button fx:id="btnAcceptAll" text="%merge.action.accept.all"  onAction="#onAcceptAll" styleClass="btn-secondary"/>
+        <Button fx:id="btnKeepAll"   text="%merge.action.keep.all"    onAction="#onKeepAll"   styleClass="btn-secondary"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnDone"      text="%merge.action.done"        onAction="#onDone"      styleClass="btn-secondary"/>
+    </HBox>
+
+    <!-- ===== Status bar ===== -->
+    <HBox styleClass="status-bar" alignment="CENTER_LEFT" spacing="8">
+        <ProgressIndicator fx:id="progressIndicator"
+                           styleClass="small-spinner"
+                           visible="false"
+                           maxHeight="20"
+                           maxWidth="20"/>
+        <Label fx:id="statusLabel" styleClass="status-label"/>
+    </HBox>
+
+</VBox>

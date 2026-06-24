@@ -1,15 +1,22 @@
 package com.churchadmin.controllers;
 
+import com.churchadmin.config.JavaFXConfig;
+import com.churchadmin.models.MergeImportReport;
 import com.churchadmin.models.SnapshotEntry;
+import com.churchadmin.models.SnapshotPayload;
 import com.churchadmin.models.enums.SnapshotType;
+import com.churchadmin.services.LocaleService;
+import com.churchadmin.services.MergeImportService;
 import com.churchadmin.services.SnapshotService;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
@@ -37,12 +44,17 @@ public class SnapshotsController implements Initializable {
 
     // ── Spring beans ──────────────────────────────────────────────────────────
 
-    private final SnapshotService snapshotService;
+    private final SnapshotService              snapshotService;
+    private final MergeImportService           mergeImportService;
+    private final MainLayoutController         mainController;
+    private final JavaFXConfig.FXMLLoaderFactory fxmlLoaderFactory;
+    private final LocaleService                localeService;
 
     // ── FXML — toolbar ────────────────────────────────────────────────────────
 
     @FXML private Button btnCreateSnapshot;
     @FXML private Button btnImportExternal;
+    @FXML private Button btnMergeImport;
 
     // ── FXML — table ──────────────────────────────────────────────────────────
 
@@ -162,6 +174,59 @@ public class SnapshotsController implements Initializable {
             setStatus(str("snapshots.error.import_failed") + ": " + task.getException().getMessage(), true);
             progressIndicator.setVisible(false);
             setToolbarEnabled(true);
+        }));
+        startDaemon(task);
+    }
+
+    @FXML
+    private void onMergeImport() {
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle(str("snapshots.button.merge.import"));
+        chooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
+        File chosen = chooser.showOpenDialog(btnMergeImport.getScene().getWindow());
+        if (chosen == null) return;
+
+        setStatus(str("snapshots.status.importing"), false);
+        setToolbarEnabled(false);
+        progressIndicator.setVisible(true);
+
+        Task<Object[]> task = new Task<>() {
+            @Override
+            protected Object[] call() throws Exception {
+                SnapshotPayload payload = snapshotService.parseSnapshotPayload(chosen.toPath());
+                MergeImportReport report = mergeImportService.analyze(payload);
+                return new Object[]{payload, report};
+            }
+        };
+        task.setOnSucceeded(e -> Platform.runLater(() -> {
+            progressIndicator.setVisible(false);
+            setToolbarEnabled(true);
+
+            Object[] result = task.getValue();
+            SnapshotPayload  payload = (SnapshotPayload)  result[0];
+            MergeImportReport report = (MergeImportReport) result[1];
+
+            try {
+                FXMLLoader loader = fxmlLoaderFactory.create();
+                loader.setLocation(getClass().getResource("/fxml/MergeImportReview.fxml"));
+                loader.setResources(localeService.getBundle());
+                Node view = loader.load();
+                MergeImportReviewController controller = loader.getController();
+                controller.initData(payload, report);
+                mainController.showView(view);
+            } catch (Exception ex) {
+                log.error("Failed to open MergeImportReview", ex);
+                setStatus(str("common.error") + ": " + ex.getMessage(), true);
+                showError(str("common.error"), ex.getMessage());
+            }
+        }));
+        task.setOnFailed(e -> Platform.runLater(() -> {
+            String msg = task.getException().getMessage();
+            setStatus(str("snapshots.error.import_failed") + ": " + msg, true);
+            progressIndicator.setVisible(false);
+            setToolbarEnabled(true);
+            showError(str("common.error"), str("snapshots.error.import_failed") + "\n" + msg);
         }));
         startDaemon(task);
     }
@@ -336,6 +401,7 @@ public class SnapshotsController implements Initializable {
     private void setToolbarEnabled(boolean enabled) {
         btnCreateSnapshot.setDisable(!enabled);
         btnImportExternal.setDisable(!enabled);
+        btnMergeImport.setDisable(!enabled);
     }
 
     private void showError(String title, String message) {
